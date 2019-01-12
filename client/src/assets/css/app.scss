@@ -1,2 +1,10 @@
 @import '~bootstrap/scss/bootstrap.scss';
 
+.home-container {
+    .section-1 {
+        img {
+            margin: 1.0em auto;
+            max-width: 60px;
+        }
+    }
+}
