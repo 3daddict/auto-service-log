@@ -12,7 +12,16 @@ export default class CreateCard extends Component {
       }
     }
 
+    componentDidMount() {
+        this.props.onRef(this)
+      }
+
+    componentWillUnmount() {
+        this.props.onRef(undefined)
+    }
+
     createNewCard = (make, model, year) => {
+        console.log('createNewCard Called')
         this.setState({
             vehicleMake: make,
             vehicleModel: model,
@@ -22,11 +31,12 @@ export default class CreateCard extends Component {
     }
     
   render() {
+      const { vehicleMake, vehicleModel, vehicleYear } = this.state;
     return (
         <Col className="mt-2" md="6">
             <Card body>
-                <CardTitle>{this.vehicleMake}</CardTitle>
-                <CardSubtitle className="lead text-muted">{this.vehicleModel} {this.vehicleYear}</CardSubtitle>
+                <CardTitle>{vehicleMake}</CardTitle>
+                <CardSubtitle className="lead text-muted">{vehicleModel} {vehicleYear}</CardSubtitle>
                 <p className="text-center">LIST ELEMENTS WILL GO HERE...</p>
             </Card>
         </Col>
