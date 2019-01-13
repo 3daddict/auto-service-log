@@ -21,17 +21,21 @@ export default class VehicleLog extends Component {
       handleSubmit(event) {
         event.preventDefault();
         const data = new FormData(event.target);
-        console.log('DATA SENT', data.get('vehicle-make'));
+        const vMake = data.get('vehicle-make');
+        const vModel = data.get('vehicle-model');
+        const vYear = data.get('vehicle-year');
 
         this.setState({
             modal: !this.state.modal
-          });
+        });
+
+        this.createCard.createNewCard(vMake, vModel, vYear);
         
         fetch('/api/form-submit-url', {
           method: 'POST',
           body: data,
         });
-        return <CreateCard />
+        
       }
 
 
@@ -43,7 +47,7 @@ export default class VehicleLog extends Component {
                 <Button onClick={this.toggle} color="info" size="sm">+</Button>
             </Container>
             <Row className="m-4 card-container">
-
+                <CreateCard onRef={ref => (this.createCard = ref)} />
             </Row>
             <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
                 <ModalHeader toggle={this.toggle}>Vehicle Details</ModalHeader>
