@@ -8,11 +8,7 @@ export default class Dashboard extends Component {
     return (
       <div>
         <Header />
-        <Container>
-            <Row>
-                <VehicleLog />
-            </Row>
-        </Container>
+        <VehicleLog />
       </div>
     )
   }
