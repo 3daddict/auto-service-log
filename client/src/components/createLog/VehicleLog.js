@@ -1,44 +1,77 @@
 import React, { Component } from 'react'
-import { Col, Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button } from 'reactstrap';
+import { Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter,Form, FormGroup, Label, Input} from 'reactstrap';
+import CreateCard from './CreateCard';
 
 export default class VehicleLog extends Component {
     constructor(props) {
       super(props)
     
       this.state = {
-         vehicleMake: '',
-         vehicleModel: '',
-         vehicleYear: ''
+        modal: false
       }
+      this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
+
+    toggle = () => {
+        this.setState({
+          modal: !this.state.modal
+        });
+      }
+
+      handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        console.log('DATA SENT', data.get('vehicle-make'));
+
+        this.setState({
+            modal: !this.state.modal
+          });
+        
+        fetch('/api/form-submit-url', {
+          method: 'POST',
+          body: data,
+        });
+        return <CreateCard />
+      }
+
+
   render() {
     return (
-      <div>
-        <Col>
-          <Card>
-            <CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />
-            <CardBody>
-              <CardTitle>Card title</CardTitle>
-              <CardSubtitle>Card subtitle</CardSubtitle>
-              <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col>
-          <Card>
-            <CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />
-            <CardBody>
-              <CardTitle>Card title</CardTitle>
-              <CardSubtitle>Card subtitle</CardSubtitle>
-              <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-        </Col>
-      </div>
+        <React.Fragment>
+            <Container className="add-title-container">
+                <h4 className="align-middle mr-2">Add a vehicle</h4>
+                <Button onClick={this.toggle} color="info" size="sm">+</Button>
+            </Container>
+            <Row className="m-4 card-container">
+
+            </Row>
+            <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                <ModalHeader toggle={this.toggle}>Vehicle Details</ModalHeader>
+                <ModalBody>
+                    <Form onSubmit={this.handleSubmit}>
+                        <FormGroup row>
+                            <Label sm={2} htmlFor="vehicle-make">Make:</Label>
+                            <Col sm={10}>
+                            <Input type="text" name="vehicle-make" id="vehicleMake" placeholder="Enter Make i.e. Nissan" />
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label sm={2} htmlFor="vehicle-model">Model:</Label>
+                            <Col sm={10}>
+                            <Input type="text" name="vehicle-model" id="vehicleModel" placeholder="Enter Model i.e. 370Z" />
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label sm={2} htmlFor="vehicle-year">Year:</Label>
+                            <Col sm={10}>
+                            <Input type="text" name="vehicle-year" id="vehicleYear" placeholder="Enter Year i.e. 2009" />
+                            </Col>
+                        </FormGroup>
+                        <Button type="submit" className="float-right" color="primary">Create</Button>
+                    </Form>
+                </ModalBody>
+            </Modal>
+        </React.Fragment>
     )
   }
 }
