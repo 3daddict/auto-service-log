@@ -25,9 +25,9 @@ export default class SettingsGroup extends React.Component {
             <FontAwesomeIcon icon="cogs" />
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem>Delete</DropdownItem>
+          <DropdownItem >Delete</DropdownItem>
           <DropdownItem divider />
-          <DropdownItem>Edit</DropdownItem>
+          <DropdownItem >Edit</DropdownItem>
         </DropdownMenu>
       </ButtonDropdown>
     );

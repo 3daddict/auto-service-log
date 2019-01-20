@@ -2,11 +2,11 @@ import React, { Fragment } from "react";
 import { Col, Card, CardTitle, CardSubtitle} from "reactstrap";
 import SettingsGroup from './SettingsGroup';
 
-const VehicleCard = ({ make, model, year }) => (
+const VehicleCard = ({ id, make, model, year, updateData }) => (
   <Fragment>
     <Col className="mt-2 mb-4" md="6">
-      <Card body>
-        <CardTitle>{make}</CardTitle>
+      <Card body id={id}>
+        <CardTitle onClick={updateData} >{make}</CardTitle>
         <CardSubtitle className="lead text-muted">
           {model} | {year}
         </CardSubtitle>
