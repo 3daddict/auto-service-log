@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row } from "reactstrap";
 import AddVehicle from "../components/dashboard/AddVehicle";
 import VehicleCard from "../components/dashboard/VehicleCard";
 
@@ -54,16 +54,19 @@ class Dashboard extends Component {
 
   onAdd(make, model, year) {
     const cardListDB = this.getListItems();
+    console.log('OUTPUT', make, model, year)
 
     cardListDB.push({
       make,
       model,
       year
     });
+
     this.setState({
       cardListDB: cardListDB
     });
-    localStorage.setItem("cardListDB", JSON.stringify(cardListDB));
+
+    // localStorage.setItem("cardListDB", JSON.stringify(cardListDB));
   }
 
   onEditSubmit(make, model, year, originalMake) {
