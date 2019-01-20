@@ -65,8 +65,8 @@ class Dashboard extends Component {
     this.setState({
       cardListDB: cardListDB
     });
-
-    // localStorage.setItem("cardListDB", JSON.stringify(cardListDB));
+    
+    localStorage.setItem("cardListDB", JSON.stringify(cardListDB));
   }
 
   onEditSubmit(make, model, year, originalMake) {
