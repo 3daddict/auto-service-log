@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Container, Row } from "reactstrap";
+import { Container, Row, Button } from "reactstrap";
 import AddVehicle from "../components/dashboard/AddVehicle";
 import VehicleCard from "../components/dashboard/VehicleCard";
 
 const cardListDB = [
   {
-    make: 1,
+    id: 1,
     make: "Volvo",
     model: "S40 T5",
     year: 2008,
@@ -15,7 +15,7 @@ const cardListDB = [
     }
   },
   {
-    make: 2,
+    id: 2,
     make: "Lexus",
     model: "IS300",
     year: 2004,
@@ -26,102 +26,78 @@ const cardListDB = [
   }
 ];
 
-localStorage.setItem("cardListDB", JSON.stringify(cardListDB));
-
 class Dashboard extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      cardListDB: JSON.parse(localStorage.getItem("cardListDB"))
-    };
-    this.onAdd = this.onAdd.bind(this);
-    this.onDelete = this.onDelete.bind(this);
-    this.onEditSubmit = this.onEditSubmit.bind(this);
-  }
-
-  componentWillMount() {
-    const cardListDB = this.getListItems();
-
-    this.setState({
-      cardListDB: cardListDB
-    });
-  }
-
-  getListItems() {
-    return this.state.cardListDB;
-  }
-
-  onAdd(make, model, year) {
-    const cardListDB = this.getListItems();
-    console.log('OUTPUT', make, model, year)
-
-    cardListDB.push({
-      make,
-      model,
-      year
-    });
-
-    this.setState({
-      cardListDB: cardListDB
-    });
+    state = {
+        cardListDB,
+        make: "",
+        model: "",
+        year: ""
+      };
     
-    localStorage.setItem("cardListDB", JSON.stringify(cardListDB));
-  }
-
-  onEditSubmit(make, model, year, originalMake) {
-    let cardListDB = this.getListItems();
-
-    cardListDB = cardListDB.map(listItem => {
-      if (listItem.make === originalMake) {
-        listItem.make = make;
-        listItem.model = model;
-        listItem.year = year;
-      }
-      return listItem;
-    });
-
-    this.setState({
-      cardListDB: cardListDB
-    });
-  }
-
-  onDelete(make) {
-    const cardListDB = this.getListItems();
-    const filteredProducts = cardListDB.filter(product => {
-      return product.make !== make;
-    });
-
-    this.setState({
-      cardListDB: filteredProducts
-    });
-  }
-
-  render() {
-    return (
-      <div className="container-fluid">
-        <h1>My Dashboard</h1>
-
-        <Container>
-          <AddVehicle onAdd={this.onAdd} />
-        </Container>
-        <Container>
-          <Row>
-            {this.state.cardListDB.map(listItem => {
-              return (
-                <VehicleCard
-                  key={listItem.make}
-                  {...listItem}
-                  onDelete={this.onDelete}
-                  onEditSubmit={this.onEditSubmit}
-                />
-              );
-            })}
-          </Row>
-        </Container>
-      </div>
-    );
-  }
-}
+      /* 
+      This method handles input changes by utilizing the event: event.target.name (firstName, description)
+      that was provided by the input and controlling the input's value by setting 
+      event.target.value to state. 
+      An example would be: firstName: "Sheila", description: "Female"
+    */
+      handleInputChange = ({ target: { name, value } }) => {
+        this.setState({ [name]: value });
+      };
+    
+      /* 
+    This method resets back to initial state
+    */
+      handleReset = () => {
+        this.setState({
+          cardListDB,
+          make: "",
+          model: "",
+          year: ""
+        });
+      };
+    
+      /* 
+      This method handles form submission by spreading out previous cardListDB entries
+      and adding in the current firstName and description state values. 
+      In addition, it also resets the input values.
+    */
+      handleSubmit = e => {
+        e.preventDefault();
+    
+        const { make, model, year } = this.state;
+    
+        if (!make || !model || !year) return null;
+    
+        this.setState(prevState => ({
+          cardListDB: [...prevState.cardListDB, { make, model, year }],
+          make: "",
+          model: "",
+          year: ""
+        }));
+      };
+    
+      render = () => (
+        <div className="container-fluid">
+          <Container>
+            <AddVehicle
+              {...this.state}
+              onHandleInputChange={this.handleInputChange}
+              onHandleSubmit={this.handleSubmit}
+            />
+          </Container>
+          <Container>
+            <Row>
+              {this.state.cardListDB.map((listItem, key) => (
+                <VehicleCard key={key} {...listItem} />
+              ))}
+              <Button type="button" onClick={this.handleReset}>
+                Reset
+              </Button>
+            </Row>
+          </Container>
+        </div>
+      );
+    }
 
 export default Dashboard;
