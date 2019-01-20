@@ -1,38 +1,42 @@
-import React, { Component } from "react";
+import React from "react";
+import { Button, Form, FormGroup, Input } from "reactstrap";
 
-class AddVehicle extends Component {
-    constructor(props) {
-        super(props)
-      
-        this.state = {
-           
-        }
-        this.onSubmit = this.onSubmit.bind(this);
-      }
-      
-      onSubmit(event) {
-          event.preventDefault();
+const AddVehicle = ({
+    make,
+    model,
+    year,
+    onHandleInputChange,
+    onHandleSubmit
+  }) => (
+    <Form onSubmit={onHandleSubmit}>
+      <h3>Add a vehicle</h3>
+      <FormGroup>
+        <Input
+          name="make"
+          placeholder="Make i.e Nissan"
+          value={make}
+          onChange={onHandleInputChange}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          name="model"
+          placeholder="Model i.e 370z"
+          value={model}
+          onChange={onHandleInputChange}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          name="year"
+          placeholder="Year"
+          value={year}
+          onChange={onHandleInputChange}
+        />
+      </FormGroup>
+      <Button type="submit">Add</Button>
+      <hr />
+    </Form>
+  );
   
-          this.props.onAdd(this.makeInput.value, this.modelInput.value, this.yearInput.value);
-  
-          this.makeInput.value = "";
-          this.modelInput.value = "";
-          this.yearInput.value = "";
-      }
-     
-    render() {
-  
-      return (
-        <form onSubmit={this.onSubmit} >
-            <h3>Add a vehicle</h3>
-            <input placeholder="Model" ref={makeInput => this.makeInput = makeInput} />
-            <input placeholder="Make" ref={modelInput => this.modelInput = modelInput} />
-            <input placeholder="Year" ref={yearInput => this.yearInput = yearInput} />
-            <button>Add</button>
-            <hr />
-        </form>
-      );
-    }
-  }
-
-export default AddVehicle;
+  export default AddVehicle;
