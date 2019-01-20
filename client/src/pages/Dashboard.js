@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import AddVehicle from '../components/dashboard/AddVehicle';
-import VehicleCard from '../components/dashboard/VehicleCard';
+import { Container, Row, Col } from "reactstrap";
+import AddVehicle from "../components/dashboard/AddVehicle";
+import VehicleCard from "../components/dashboard/VehicleCard";
 
 const cardListDB = [
   {
@@ -24,97 +25,100 @@ const cardListDB = [
     }
   }
 ];
-  
-  localStorage.setItem("cardListDB", JSON.stringify(cardListDB));
-  
-  class Dashboard extends Component {
-    constructor(props) {
-      super(props);
-  
-      this.state = {
-        cardListDB: JSON.parse(localStorage.getItem("cardListDB"))
-      };
-      this.onAdd = this.onAdd.bind(this);
-      this.onDelete = this.onDelete.bind(this);
-      this.onEditSubmit = this.onEditSubmit.bind(this);
-    }
-  
-    componentWillMount() {
-      const cardListDB = this.getProducts();
-  
-      this.setState({
-        cardListDB: cardListDB
-      });
-    }
-  
-    getProducts() {
-      return this.state.cardListDB;
-    }
-  
-    onAdd(make, model, year) {
-      const cardListDB = this.getProducts();
-  
-      cardListDB.push({
-          make,
-          model,
-          year
-      })
-      this.setState({
-          cardListDB: cardListDB
-      })
-    }
-  
-    onEditSubmit(make, model, year, originalMake) {
-        let cardListDB = this.getProducts();
-  
-  
-          cardListDB = cardListDB.map(product => {
-              if(product.make === originalMake) {
-                  product.make = make;
-                  product.model = model;
-                  product.year = year;
-              }
-              return product;
-          });
-  
-          this.setState({
-              cardListDB: cardListDB
-          })
-    }
-  
-    onDelete(make) {
-      const cardListDB = this.getProducts();
-      const filteredProducts = cardListDB.filter(product => {
-          return product.make !== make;
-      })
-      
-      this.setState({
-          cardListDB: filteredProducts
-      })
-    }
-  
-    render() {
-      return (
-        <div className="App">
-          <h1>My Dashboard</h1>
-  
-          <AddVehicle 
-              onAdd={this.onAdd}
-          />
-  
-          {this.state.cardListDB.map(product => {
-            return (
-              <VehicleCard
-                key={product.make}
-                {...product}
-                onDelete={this.onDelete}
-                onEditSubmit={this.onEditSubmit}
-              />
-            );
-          })}
-        </div>
-      );
-    }
+
+localStorage.setItem("cardListDB", JSON.stringify(cardListDB));
+
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      cardListDB: JSON.parse(localStorage.getItem("cardListDB"))
+    };
+    this.onAdd = this.onAdd.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.onEditSubmit = this.onEditSubmit.bind(this);
   }
 
-  export default Dashboard;
+  componentWillMount() {
+    const cardListDB = this.getListItems();
+
+    this.setState({
+      cardListDB: cardListDB
+    });
+  }
+
+  getListItems() {
+    return this.state.cardListDB;
+  }
+
+  onAdd(make, model, year) {
+    const cardListDB = this.getListItems();
+
+    cardListDB.push({
+      make,
+      model,
+      year
+    });
+    this.setState({
+      cardListDB: cardListDB
+    });
+    localStorage.setItem("cardListDB", JSON.stringify(cardListDB));
+  }
+
+  onEditSubmit(make, model, year, originalMake) {
+    let cardListDB = this.getListItems();
+
+    cardListDB = cardListDB.map(listItem => {
+      if (listItem.make === originalMake) {
+        listItem.make = make;
+        listItem.model = model;
+        listItem.year = year;
+      }
+      return listItem;
+    });
+
+    this.setState({
+      cardListDB: cardListDB
+    });
+  }
+
+  onDelete(make) {
+    const cardListDB = this.getListItems();
+    const filteredProducts = cardListDB.filter(product => {
+      return product.make !== make;
+    });
+
+    this.setState({
+      cardListDB: filteredProducts
+    });
+  }
+
+  render() {
+    return (
+      <div className="container-fluid">
+        <h1>My Dashboard</h1>
+
+        <Container>
+          <AddVehicle onAdd={this.onAdd} />
+        </Container>
+        <Container>
+          <Row>
+            {this.state.cardListDB.map(listItem => {
+              return (
+                <VehicleCard
+                  key={listItem.make}
+                  {...listItem}
+                  onDelete={this.onDelete}
+                  onEditSubmit={this.onEditSubmit}
+                />
+              );
+            })}
+          </Row>
+        </Container>
+      </div>
+    );
+  }
+}
+
+export default Dashboard;
