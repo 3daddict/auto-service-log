@@ -1,10 +1,11 @@
+import "bootstrap/scss/bootstrap.scss";
 import React, { Component } from "react";
-import { Container, Row, Button } from "reactstrap";
+import { Container, Row } from "reactstrap";
+import axios from 'axios';
 import AddVehicle from "../components/dashboard/AddVehicle";
-import VehicleCard from "../components/dashboard/VehicleCard";
-import EditModal from '../components/dashboard/EditModal';
+import VehihcleCard from "../components/dashboard/VehicleCard";
 
-const cardListDB = [
+const dummyDB = [
   {
     id: "1",
     make: "Volvo",
@@ -27,107 +28,107 @@ const cardListDB = [
   }
 ];
 
+
 class Dashboard extends Component {
+  state = {
+    vehicleDatabase: [],
+    id: "",
+    make: "",
+    model: "",
+    year: null
+  };
 
-    state = {
-        cardListDB: [],
-        id: "",
-        make: "",
-        model: "",
-        year: ""
-      };
+  componentWillMount = () => {
+    this.readData();
+  };
 
-      componentWillMount = () => {
-          this.readData();
-      }
-    
-      //Event Handler for form values
-      handleInputChange = ({ target: { name, value } }) => {
-        this.setState({ [name]: value });
-      };
-    
-      //Create data from form submittion
-      handleSubmit = e => {
-        e.preventDefault();
-        //destructure
-        const { make, model, year } = this.state;
-        //conditional for input validation
-        if (!make || !model || !year) return null;
-        //setState - reset form values
-        this.setState(prevState => ({
-            //destructure previous values, submit, then reset
-          cardListDB: [...prevState.cardListDB, { make, model, year }],
-          make: "",
-          model: "",
-          year: ""
-        }));
-      };
+  handleChange = ({ target: { name, value } }) => {
+    this.setState({ [name]: value });
+  };
 
-      //Read data from DB and then setState
-      readData = () => {
-          //Axios call will go here...
+  //CREATE data from the form submission
+  handleSubmit = event => {
+    event.preventDefault();
+    //destructure
+    const { make, model, year } = this.state;
+    //conditional input vaLidation
+    if (!make || !model || !year) return null;
+    //setState + reset form values onSubmit
+    this.setState(prevState => ({
+      //destructure previous values, submit, then reset
+      vehicleDatabase: [...prevState.vehicleDatabase, { make, model, year }],
+      make: "",
+      model: "",
+      year: ""
+    }));
+  };
 
-        this.setState({
-            cardListDB
-          });
-      }
+  //READ data from DB and then setState
+  readData = () => {
+    //Axios call to DB
+    // axios.get('../dummyData/dummyData.json').then((response) => {
+    //   console.log('Response:', response);
+    //   this.setState({
+    //     vehicleDatabase: response
+    //   })
+    //   .catch(function (error) {
+    //     console.log('DB Connection Error', error);
+    //   });
+    // })
+    this.setState({
+          vehicleDatabase: dummyDB
+        })
+  };
 
-      updateData = (e) => {
-          const currentDB = cardListDB;
-          const selectedID = e.target.parentNode.id;
-          const tempValue = "Gibberish"
-          console.log('Value', e.target.name);
+  //UPDATE data from DB
+  updateData = editedVehicle => {
+    //Axios update will go here...
+    //assing a copy of vehicle array with modified value for the editedVehicle.
+    const vehicleDatabase = this.state.vehicleDatabase.map(vehicle => {
+      return vehicle.id === editedVehicle.id ? editedVehicle : vehicle;
+    });
+    //set new state
+    this.setState({
+      vehicleDatabase
+    });
+  };
 
-            currentDB.map((dbItem, key) => {
-                console.log('dbItem:', dbItem);
-                console.log('selectedID:', selectedID);
+  // DELETE function wont delete new vehicleDatabase because they are not created with an ID,
+  // once you hoock up database you'll use the DB's id instead of 1, 2, 3.
+  deleteData = vehicleId => {
+    //Axios delete will go here...
+    //assing a new vehicleDatabase const removing the to delete filtering by id
+    const vehicleDatabase = this.state.vehicleDatabase.filter(
+      vehicle => vehicle.id !== vehicleId
+    );
+    this.setState({
+      vehicleDatabase
+    });
+  };
 
-                if(selectedID === dbItem.id){
-                    console.log('CODE TO CHANGE TRIGGERED');
-                    this.setState({
-                        // [e.target.name]: e.target.value
-                        [e.target.name]: tempValue
-                      });
-                }
-            });
-
-      }
-
-      handleReset = () => {
-        this.setState({
-          cardListDB,
-          make: "",
-          model: "",
-          year: ""
-        });
-      };
-    
-    
-      render = () => (
-        <div className="container-fluid">
-          <Container>
-            <AddVehicle
-              {...this.state}
-              onHandleInputChange={this.handleInputChange}
-              onHandleSubmit={this.handleSubmit}
+  render() {
+    return (
+      <Container>
+        <h1>Vehicle Dashboard</h1>
+        <p>Browse or add a vehicle</p>
+        <AddVehicle
+          {...this.state}
+          onHandleChange={this.handleChange}
+          onHandleSubmit={this.handleSubmit}
+        />
+        <Row>
+          {this.state.vehicleDatabase.map((vehicle, key) => (
+            <VehihcleCard
+              {...vehicle}
+              key={key}
+              updateData={this.updateData}
+              deleteData={this.deleteData}
             />
-          </Container>
-          <EditModal updateData={this.updateData} />
-          <Container>
-            <Row>
-              {this.state.cardListDB.map((listItem, key) => (
-                <VehicleCard 
-                key={key} {...listItem} 
-                updateData={this.updateData}
-                />
-              ))}
-              <Button type="button" onClick={this.handleReset}>
-                Reset
-              </Button>
-            </Row>
-          </Container>
-        </div>
-      );
-    }
+          ))}
+        </Row>
+      </Container>
+    );
+  }
+}
 
 export default Dashboard;

@@ -5,36 +5,40 @@ const AddVehicle = ({
   make,
   model,
   year,
-  onHandleInputChange,
-  onHandleSubmit
+  onHandleSubmit,
+  onHandleChange
 }) => (
   <Form onSubmit={onHandleSubmit}>
     <h3>Add a vehicle</h3>
     <FormGroup>
       <Input
         name="make"
-        placeholder="Make i.e Nissan"
+        placeholder="Vehicle's Make"
         value={make}
-        onChange={onHandleInputChange}
+        onChange={onHandleChange}
       />
     </FormGroup>
     <FormGroup>
       <Input
         name="model"
-        placeholder="Model i.e 370z"
+        placeholder="Vehicle's Model"
         value={model}
-        onChange={onHandleInputChange}
+        onChange={onHandleChange}
       />
     </FormGroup>
     <FormGroup>
       <Input
         name="year"
-        placeholder="Year"
+        placeholder="Vehicle's Year"
         value={year}
-        onChange={onHandleInputChange}
+        onChange={onHandleChange}
       />
     </FormGroup>
-    <Button type="submit">Add</Button>
+    <div className="text-right">
+      <Button className="text-right" type="submit">
+        Add
+      </Button>
+    </div>
     <hr />
   </Form>
 );

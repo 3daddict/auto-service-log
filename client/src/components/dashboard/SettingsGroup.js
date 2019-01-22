@@ -18,16 +18,23 @@ export default class SettingsGroup extends React.Component {
     });
   }
 
+  onEditClick = () => {
+    this.props.handleEditClick();
+  };
+
+  onDeleteClick = () => {
+    this.props.handleDeleteClick();
+  };
   render() {
     return (
       <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-        <DropdownToggle caret outline color="info" >
-            <FontAwesomeIcon icon="cogs" />
+        <DropdownToggle caret outline color="info">
+          <FontAwesomeIcon icon="cogs" />
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem >Delete</DropdownItem>
+          <DropdownItem className="text-danger" onClick={this.onDeleteClick}>Delete</DropdownItem>
           <DropdownItem divider />
-          <DropdownItem >Edit</DropdownItem>
+          <DropdownItem onClick={this.onEditClick}>Edit</DropdownItem>
         </DropdownMenu>
       </ButtonDropdown>
     );
