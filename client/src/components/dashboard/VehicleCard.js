@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Col, Card, CardTitle, CardSubtitle, CardText } from "reactstrap";
+import { Col, Card, CardTitle, CardSubtitle, CardText, Button } from "reactstrap";
 import SettingsGroup from "./SettingsGroup";
 import VehicleEditForm from "./VehicleEditForm";
 
@@ -54,10 +54,8 @@ export default class VehicleCard extends React.Component {
               <CardSubtitle className="text-muted">
                 {model} | {year}
               </CardSubtitle>
-              <CardText>
-                airuhqirufiwufniwfqerwuifeirbfqerifbri
-              </CardText>
               <div className="text-right">
+              <Button className="mt-2 mb-2 mr-2" color="primary">Details</Button>
                 <SettingsGroup
                   handleEditClick={this.handleEditClick}
                   handleDeleteClick={this.handleDeleteClick}
