@@ -14,7 +14,7 @@ const AddVehicle = ({
       <Input
         name="make"
         placeholder="Vehicle's Make"
-        value={make}
+        value={make || ""}
         onChange={onHandleChange}
       />
     </FormGroup>
@@ -22,7 +22,7 @@ const AddVehicle = ({
       <Input
         name="model"
         placeholder="Vehicle's Model"
-        value={model}
+        value={model || ""}
         onChange={onHandleChange}
       />
     </FormGroup>
@@ -30,12 +30,12 @@ const AddVehicle = ({
       <Input
         name="year"
         placeholder="Vehicle's Year"
-        value={year}
+        value={year || ""}
         onChange={onHandleChange}
       />
     </FormGroup>
     <div className="text-right">
-      <Button className="text-right" type="submit">
+      <Button className="text-right" color="success" type="submit">
         Add
       </Button>
     </div>
