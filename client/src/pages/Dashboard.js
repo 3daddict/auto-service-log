@@ -4,6 +4,7 @@ import { Container, Row } from "reactstrap";
 // import axios from 'axios';
 import AddVehicle from "../components/dashboard/AddVehicle";
 import VehihcleCard from "../components/dashboard/VehicleCard";
+import VehicleDetails from './VehicleDetails';
 
 class Dashboard extends Component {
   state = {
@@ -104,6 +105,7 @@ class Dashboard extends Component {
             />
           ))}
         </Row>
+        <VehicleDetails vehicleData={this.state.vehicleDatabase} />
       </Container>
     );
   }

@@ -10,9 +10,11 @@ export default class VehicleDetails extends Component {
     }
     
   render() {
+    const { make } = this.props.vehicleData;
     return (
       <div>
         <h1>Vehicle Details Page</h1>
+        <h2>{make}</h2>
       </div>
     )
   }
