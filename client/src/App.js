@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Error from './components/Error';
+import VehicleDetails from "./pages/VehicleDetails";
 
 library.add(faCogs);
 
@@ -23,6 +24,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/dashboard" component={Dashboard} />
+            <Route path="/vehicle-details" component={VehicleDetails} />
             <Route component={Error} />
           </Switch>
           <Footer />
