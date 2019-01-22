@@ -1,15 +1,16 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-node_modules
-.pnp
-.pnp.js
+/client/node_modules
+/node_modules
+/client/.pnp
+/client/.pnp.js
 
 # testing
-client/coverage
+/client/coverage
 
 # production
-client/build
+/client/build
 
 # misc
 .DS_Store
@@ -22,4 +23,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+<<<<<<< HEAD:.gitignore
+/client/package-lock.json
+/client/yarn.lock
+package-lock.json
+yarn.lock
+=======
 package-lock.json*
+>>>>>>> b879e4bec70cdba549024c925024d03843ea0745:.gitignore
