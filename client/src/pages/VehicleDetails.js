@@ -10,10 +10,11 @@ export default class VehicleDetails extends Component {
     }
     
   render() {
-    // const { make } = this.props.vehicleData;
+    const { id, make, model, year } = this.props.location.state;
     return (
       <div>
-        <h1>Vehicle Details Page</h1>
+        <h1>{make} Page</h1>
+        <p>{id} || {model} || {year}</p>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, beatae quae. Laborum ducimus itaque alias!</p>
       </div>
     )
