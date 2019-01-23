@@ -1,22 +1,27 @@
 const User = require('../models/user');
 
 exports.signUp = (req, res, next) => {
-    const submittedEmail = req.body.email;
-    const submittedPassword = req.body.password;
+    const email = req.body.email;
+    const password = req.body.password;
+    //verify email and password entered
+    if(!email || !password) {
+        return res.status(422).send({ error: 'Please provide an email and password' })
+    }
+
     //Check if user email exists
-    User.findOne({ email: submittedEmail }, (err, existingUser) => {
+    User.findOne({ email: email }, (err, existingUser) => {
         if(err) { return next(err) };
         //If exists return err
         if(existingUser) { 
             return res.status(422).send({ error: 'Email is already in use' });
          }
          //If new email then create and save record
-         const submittedUser = new User({
-             email: submittedEmail,
-             password: submittedPassword
+         const user = new User({
+             email: email,
+             password: password
          })
          //save record to database
-         submittedUser.save((err) => {
+         user.save((err) => {
             if(err) { return next(err) }
             //on success
             res.json({ success: true });
