@@ -4,12 +4,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 const secret = process.env.SECRET;
 
-tokenForUser = (user) => {
+tokenForUser = function(user) {
     const timestamp = new Date().getTime();
     return jwt.encode({ sub: user.id, iat: timestamp }, secret);
 }
 
-exports.signUp = (req, res, next) => {
+exports.signUp = function(req, res, next) {
     const email = req.body.email;
     const password = req.body.password;
     //verify email and password entered
@@ -18,7 +18,7 @@ exports.signUp = (req, res, next) => {
     }
 
     //Check if user email exists
-    User.findOne({ email: email }, (err, existingUser) => {
+    User.findOne({ email: email }, function(err, existingUser) {
         if(err) { return next(err) };
         //If exists return err
         if(existingUser) { 
@@ -30,7 +30,7 @@ exports.signUp = (req, res, next) => {
              password: password
          })
          //save record to database
-         user.save((err) => {
+         user.save(function(err) {
             if(err) { return next(err) }
             //on success
             res.json({ token: tokenForUser(user) });
