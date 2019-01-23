@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
-import { Col, Card, CardTitle, CardSubtitle, CardText, Button } from "reactstrap";
+import { Link } from "react-router-dom";
+import { Col, Card, CardTitle, CardSubtitle, Button } from "reactstrap";
 import SettingsGroup from "./SettingsGroup";
 import VehicleEditForm from "./VehicleEditForm";
 
@@ -55,7 +56,11 @@ export default class VehicleCard extends React.Component {
                 {model} | {year}
               </CardSubtitle>
               <div className="text-right">
-              <Button className="mt-2 mb-2 mr-2" color="primary">Details</Button>
+                <Link to="/vehicle-details">
+                  <Button className="mt-2 mb-2 mr-2" color="primary">
+                    Details
+                  </Button>
+                </Link>
                 <SettingsGroup
                   handleEditClick={this.handleEditClick}
                   handleDeleteClick={this.handleDeleteClick}
