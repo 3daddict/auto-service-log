@@ -11,7 +11,7 @@ module.exports = function(app) {
         res.send({ hola: 'muchacho' })
     });
 
-    // app.post('/signin', requireSignin, Authentication.signin);
-    app.post('/signup', Authentication.signUp);
+    app.post('/signin', requireSignin, Authentication.signin);
+    app.post('/signup', Authentication.signup);
 
 };
