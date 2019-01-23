@@ -14,6 +14,7 @@
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -23,11 +24,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-<<<<<<< HEAD:.gitignore
 /client/package-lock.json
 /client/yarn.lock
 package-lock.json
 yarn.lock
-=======
-package-lock.json*
->>>>>>> b879e4bec70cdba549024c925024d03843ea0745:.gitignore
