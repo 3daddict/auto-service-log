@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { Col, Card, CardTitle, CardSubtitle, Button } from "reactstrap";
 import SettingsGroup from "./SettingsGroup";
 import VehicleEditForm from "./VehicleEditForm";
 
-export default class VehicleCard extends React.Component {
+class VehicleCard extends React.Component {
   state = {
     //Toggle state to conditional rendering
     toggleEdit: false
@@ -41,6 +41,18 @@ export default class VehicleCard extends React.Component {
     this.props.deleteData(vehicleId);
   };
 
+  handleDetailClick = () => {
+    //deconstruct props
+    const { id, make, model, year } = this.props;
+    //assign them to an object to be pushed
+    //const propsToPush = { make, model, year };
+    // use React-Router-Dom history.push to go to new page and send props
+    this.props.history.push({
+      pathname: "/vehicle-details",
+      state: { id, make, model, year }
+    });
+  };
+
   // this renderContent function written outside render method to use if statement
   renderContent = () => {
     //deconstruct props
@@ -56,11 +68,13 @@ export default class VehicleCard extends React.Component {
                 {model} | {year}
               </CardSubtitle>
               <div className="text-right">
-                <Link to="/vehicle-details">
-                  <Button className="mt-2 mb-2 mr-2" color="primary">
+                  <Button
+                    className="mt-2 mb-2 mr-2"
+                    color="primary"
+                    onClick={this.handleDetailClick}
+                  >
                     Details
                   </Button>
-                </Link>
                 <SettingsGroup
                   handleEditClick={this.handleEditClick}
                   handleDeleteClick={this.handleDeleteClick}
@@ -85,3 +99,6 @@ export default class VehicleCard extends React.Component {
     return this.renderContent();
   }
 }
+
+//need to wrap in withRouter imported from React-Router to use history.push
+export default withRouter(VehicleCard);
