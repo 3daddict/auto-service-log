@@ -45,7 +45,7 @@ export default class Example extends React.Component {
                   </DropdownItem>
 							<DropdownItem divider />
 							<DropdownItem>
-								Sign-up
+              <NavLink className="nav-link" to="/signup">Sign-up</NavLink>
                   </DropdownItem>
 						</DropdownMenu>
 					</UncontrolledDropdown>
