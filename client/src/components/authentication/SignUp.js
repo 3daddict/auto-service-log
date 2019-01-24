@@ -7,14 +7,17 @@ import * as actions from '../../actions';
 
 class SignUp extends Component {
   onSubmit = formProps => {
-    this.props.signup(formProps);
+    this.props.signup(formProps, () => {
+      this.props.history.push('/dashboard');
+      console.log("HISTORY:", this.props.history)
+    });
   };
 
   render() {
     const { handleSubmit } = this.props;
     return (
       <Container>
-      <Form onSubmit={ handleSubmit(this.onSubmit) }>
+      <Form onSubmit={ handleSubmit(this.onSubmit.bind(this)).bind(this) }>
         <FormGroup>
           <Label for="signUpEmail">Email</Label>
           <Field 

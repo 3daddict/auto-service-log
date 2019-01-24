@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AUTH_USER, AUTH_ERROR } from './types';
 
-export const signup = formProps => async dispatch => {
+export const signup = (formProps, callback) => async dispatch => {
     try{
     const response = await axios.post(
         'http://localhost:5000/signup', 
@@ -12,12 +12,13 @@ export const signup = formProps => async dispatch => {
             type: AUTH_USER,
             payload: response.data.token
         });
+        callback();
         console.log('TRY RESPONSE:', response);
-    } catch(error) {
+    } catch(e) {
         dispatch({
             type: AUTH_ERROR,
-            payload: 'Email is already in use'
+            payload: e.response
         });
-        // console.log('CATCH RESPONSE:', error);
+        console.log('CATCH RESPONSE:', e);
     }
 };
