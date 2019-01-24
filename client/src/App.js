@@ -7,7 +7,8 @@ import { faCogs } from '@fortawesome/free-solid-svg-icons';
 import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import reduxThunk from 'redux-thunk';
 
 import reducers from './reducers';
 import Header from "./components/Header";
@@ -20,10 +21,16 @@ import SignUp from './components/authentication/SignUp';
 
 library.add(faCogs);
 
+const store = createStore(
+  reducers,
+  {},
+  applyMiddleware(reduxThunk)
+);
+
 class App extends Component {
   render() {
     return (
-      <Provider store={createStore(reducers, {})}>
+      <Provider store={store}>
         <BrowserRouter>
           <div>
             <Header />
