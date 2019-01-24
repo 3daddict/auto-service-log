@@ -41,6 +41,7 @@ class SignUp extends Component {
         </FormGroup>
         <div className="text-right">
           <Button className="mb-2" color="primary">Sign Up</Button>
+          <p className="text-danger">{this.props.errorMessage}</p>
         </div>
     </Form>
       </Container>
@@ -48,7 +49,11 @@ class SignUp extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return { errorMessage: state.auth.errorMessage };
+}
+
 export default compose(
-  connect(null, actions),
+  connect(mapStateToProps, actions),
   reduxForm({ form: 'signup' })
 )(SignUp);
