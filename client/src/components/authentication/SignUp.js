@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
+import PropTypes from 'prop-types';
 import { Button, Container, Form, FormGroup, Label } from 'reactstrap';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 class SignUp extends Component {
+
+    static contextTypes = {
+        router: PropTypes.object
+      }
+
     onSubmit = formProps => {
         this.props.signup(formProps, () => {
-          this.props.history.push('/dashboard');
+        //   this.props.history.push('/dashboard');
+        this.context.router.history.push('/dashboard');
         });
       };
 
