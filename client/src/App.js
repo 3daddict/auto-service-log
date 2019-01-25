@@ -5,12 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCogs } from '@fortawesome/free-solid-svg-icons';
 
 import React, { Component } from "react";
-import { BrowserRouter, Route, Switch, withRouter } from "react-router-dom";
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import reduxThunk from 'redux-thunk';
-
-import reducers from './reducers';
+import { Route, Switch, withRouter } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -21,17 +16,9 @@ import SignUp from './components/authentication/SignUp';
 
 library.add(faCogs);
 
-const store = createStore(
-  reducers,
-  {},
-  applyMiddleware(reduxThunk)
-);
-
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <BrowserRouter>
           <div>
             <Header />
             <Switch>
@@ -43,8 +30,6 @@ class App extends Component {
             </Switch>
             <Footer />
           </div>
-        </BrowserRouter>
-      </Provider>
     );
   }
 }
