@@ -14,7 +14,6 @@ class SignUp extends Component {
 
     onSubmit = formProps => {
         this.props.signup(formProps, () => {
-        //   this.props.history.push('/dashboard');
         this.context.router.history.push('/dashboard');
         });
       };

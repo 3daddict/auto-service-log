@@ -1,7 +1,7 @@
 import "bootstrap/scss/bootstrap.scss";
 import React, { Component } from "react";
 import { Container, Row } from "reactstrap";
-// import axios from 'axios';
+import requireAuth from '../components/requireAuth';
 import AddVehicle from "../components/dashboard/AddVehicle";
 import VehihcleCard from "../components/dashboard/VehicleCard";
 
@@ -109,7 +109,7 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default requireAuth(Dashboard);
 
 const dummyDB = [
   {
