@@ -6,14 +6,14 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
-class SignUp extends Component {
+class SignIn extends Component {
 
     static contextTypes = {
         router: PropTypes.object
       }
 
     onSubmit = formProps => {
-        this.props.signup(formProps, () => {
+        this.props.signin(formProps, () => {
         this.context.router.history.push('/dashboard');
         });
       };
@@ -25,31 +25,31 @@ class SignUp extends Component {
       <Container>
       <Form onSubmit={handleSubmit(this.onSubmit)} >
         <FormGroup>
-          <Label for="signUpEmail">Email</Label>
+          <Label for="signInEmail">Email</Label>
           <Field 
             className="form-control"
             name="email"
             type="text"
             component="input"
-            id="signUpEmail"
+            id="signInEmail"
             placeholder="Enter an email"
             autoComplete="off"
           />
         </FormGroup>
         <FormGroup>
-          <Label for="signUpPassword">Password</Label>
+          <Label for="signInPassword">Password</Label>
           <Field 
           className="form-control"
             name="password"
             type="password"
             component="input"
-            id="signUpPassword" 
+            id="signInPassword" 
             placeholder="Enter a password"
             autoComplete="off"
           />
         </FormGroup>
         <div className="text-right">
-          <Button className="mb-2" color="primary">Sign Up</Button>
+          <Button className="mb-2" color="primary">Sign In</Button>
           <p className="text-danger">{this.props.errorMessage}</p>
         </div>
     </Form>
@@ -64,5 +64,5 @@ function mapStateToProps(state) {
   
   export default compose(
     connect(mapStateToProps, actions),
-    reduxForm({ form: 'signup' })
-  )(SignUp);
+    reduxForm({ form: 'signin' })
+  )(SignIn);
