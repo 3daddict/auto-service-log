@@ -1,8 +1,8 @@
 import "bootstrap/scss/bootstrap.scss";
 import React, { Component } from "react";
 import { Container, Row } from "reactstrap";
-import axios from 'axios';
-import requireAuth from '../components/requireAuth';
+import axios from "axios";
+import requireAuth from "../components/requireAuth";
 import AddVehicle from "../components/dashboard/AddVehicle";
 import VehihcleCard from "../components/dashboard/VehicleCard";
 
@@ -43,19 +43,16 @@ class Dashboard extends Component {
   };
 
   //READ data from DB and then setState
- readData = async dispatch => {
-    //Axios call to DB
-    try {
-        const response = await axios.get(
-          "http://localhost:5000/"
-        );
+  readData = async dispatch => {
+    axios.get("http://localhost:3000/getVehicles")
+      .then(response => {
         this.setState({
-            vehicleDatabase: response.data.vehicles
-          })
-
-      } catch (e) {
-        console.log(e);
-      }
+          vehicleDatabase: response.data.vehicles
+        });
+      })
+      .catch(error => {
+        console.log("Error fetching and parsing data", error);
+      });
   };
 
   //UPDATE data from DB
@@ -231,4 +228,3 @@ export default requireAuth(Dashboard);
 //     }
 //   }
 // ]
-
