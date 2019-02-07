@@ -12,15 +12,6 @@ module.exports = function(app) {
         res.send(db.test)
     });
 
-    app.get('/getVehicles', function(req, res, next) {
-        const userId = req.data._id;
-        User.findById(userId)
-          .then(user => { 
-            res.status(200).json(data)
-            })
-          .catch(next)
-    });
-
     app.post('/signin', requireSignin, Authentication.signin);
     app.post('/signup', Authentication.signup);
 
