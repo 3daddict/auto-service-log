@@ -5,14 +5,27 @@ import axios from "axios";
 import requireAuth from "../components/requireAuth";
 import AddVehicle from "../components/dashboard/AddVehicle";
 import VehihcleCard from "../components/dashboard/VehicleCard";
+import { GraphQLClient } from 'graphql-request'
+
+
+const makeRequest = (query, variables) =>{
+  const url = 'http://localhost:5000/graphql'
+  const client = new GraphQLClient(url,{method: 'POST'})
+
+  return client.request(query, variables)
+}
 
 class Dashboard extends Component {
   state = {
     vehicleDatabase: [],
     id: "",
-    make: "",
-    model: "",
-    year: null
+    make: null,
+    model: null,
+    year: null,
+    loadingModels: false,
+    loadingMakes: false,
+    makes: [],
+    models: [],
   };
 
   componentWillMount = () => {
@@ -36,8 +49,8 @@ class Dashboard extends Component {
     this.setState(prevState => ({
       //destructure previous values, submit, then reset
       vehicleDatabase: [...prevState.vehicleDatabase, { make, model, year }],
-      make: "",
-      model: "",
+      make: null,
+      model: null,
       year: ""
     }));
   };
@@ -85,6 +98,27 @@ class Dashboard extends Component {
     });
   };
 
+  handleYearChange = e =>{
+    this.setState({year: e.target.value, loadingMakes: true},()=> {
+      if(this.state.year.toString().length === 4) {
+        makeRequest(`{getMakes{ name }}`).then(({ getMakes }) => {
+          this.setState({ makes: getMakes,  loadingMakes: false })
+        })
+      }
+    })
+  }
+  handleMakeChange = e =>{
+    this.setState({make: e.target.value, loadingModels: true}, ()=>{
+       makeRequest(`query models($input: GetModelsInput!){ getModels(input: $input) { name } }`, { input: { make: { name: this.state.make}, year: this.state.year}}).then(({getModels})=>{
+         this.setState({models: getModels, loadingModels: false})
+      })
+    })
+  }
+
+  handleModelChange = e =>{
+    this.setState({model: e.target.value})
+  }
+
   render() {
     return (
       <Container>
@@ -94,6 +128,13 @@ class Dashboard extends Component {
           {...this.state}
           onHandleChange={this.handleChange}
           onHandleSubmit={this.handleSubmit}
+          onHandleYearChange={this.handleYearChange}
+          onHandleModelChange={this.handleModelChange}
+          onHandleMakeChange={this.handleMakeChange}
+          makes={this.state.makes}
+          models={this.state.models}
+          loadingMakes={this.state.loadingMakes}
+          loadingModels={this.state.loadingModels}
         />
         <Row>
           {this.state.vehicleDatabase.map((vehicle, key) => (

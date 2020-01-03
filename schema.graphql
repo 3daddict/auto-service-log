@@ -1,0 +1,48 @@
+type Make {
+  name: String!
+  models: [Model]!
+}
+
+input MakeInput {
+  name: String!
+}
+
+type Model {
+  name: String!
+  year: Year!
+}
+
+input ModelInput {
+  name: String!
+  year: Year!
+}
+
+type Vehicle {
+  make: Make!
+  model: Model!
+  trim: String
+  year: Year!
+}
+
+type Garage {
+  vehicles: [Vehicle]!
+}
+
+scalar Year
+
+input GetModelsInput {
+  make: MakeInput!
+  year: Year!
+}
+
+type Query {
+  getMakes: [Make]
+
+  getMake(name: String! year: Year!): Make
+
+  getModels(input: GetModelsInput!): [Model]
+}
+
+schema {
+  query: Query
+}
