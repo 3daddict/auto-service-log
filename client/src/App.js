@@ -15,6 +15,7 @@ import VehicleDetails from "./pages/VehicleDetails";
 import SignUp from './components/authentication/SignUp';
 import SignOut from './components/authentication/SignOut';
 import SignIn from './components/authentication/SignIn';
+import { Services } from './pages/Services'
 
 library.add(faCogs);
 
@@ -30,6 +31,7 @@ class App extends Component {
               <Route path="/signin" render={()=> <SignIn />} />
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/vehicle-details" component={VehicleDetails} />
+              <Route path="/services" component={Services}/>
               <Route component={Error} />
             </Switch>
             <Footer />

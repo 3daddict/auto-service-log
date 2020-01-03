@@ -7,6 +7,8 @@ const fs = require('fs')
 const axios = require('axios')
 const _ = require('lodash')
 const Vehicle = require('../models/Vehicle')
+const Service = require('../models/Service')
+const Job = require('../models/Job')
 
 const getMakes = module.exports.getMakes = async (obj, args, context, info) => {
   const url =  `https://vpic.nhtsa.dot.gov/api/vehicles/getallmanufacturers?format=json`
@@ -78,6 +80,38 @@ const getModels = module.exports.getModels = async (obj, { input: { make, year} 
   )
 }
 
+const getServices = () => {
+  return new Promise(
+      (resolve, reject) => {
+        Service.find((err, results) => {
+          if (err) {
+            reject(err)
+          }
+          resolve(results.map(result=>{
+            return {
+              ...result,
+              name: result.name,
+              difficulty: result.difficulty,
+              suggestedServiceInterval: [result.suggestedServiceInterval],
+              estimatedTimeToComplete: [result.estimatedTimeToComplete],
+              notes: result.notes,
+            }
+          }))
+        })
+      }
+  )
+}
+
+const getService = (_id) =>{}
+
+const getJobs = () => {}
+
+const getJob = (_id) => {}
+
+const createVehicle = (obj, {input: {make, model, year}}, context, info) => {
+  const vehicle = new Vehicle({make: make.name, model: model.name, year})
+  return vehicle.save().then(vehicle => ({ ok: true, vehicle: { make, model, year} }))
+}
 const resolvers = {
   Query:{
     getMake,
@@ -85,21 +119,16 @@ const resolvers = {
     getModels,
     getVehicles,
     getVehicle,
+    getServices,
   },
   Mutation: {
-    createVehicle(obj, {input: {make, model, year}}, context, info) {
-      const vehicle = new Vehicle({make: make.name, model: model.name, year})
-      console.log(vehicle)
-
-      return vehicle.save().then(vehicle => ({ ok: true, vehicle: { make, model, year} }))
-
-    }
+    createVehicle,
   },
   Make: {
     models(obj, args, context, info) {
       return getModels(obj, args, context, info)
     }
-  }
+  },
 }
 
 const typeDefs = fs.readFileSync('./schema.graphql').toString()
