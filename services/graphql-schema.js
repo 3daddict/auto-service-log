@@ -6,6 +6,7 @@ const { makeExecutableSchema } =  require('graphql-tools')
 const fs = require('fs')
 const axios = require('axios')
 const _ = require('lodash')
+const Vehicle = require('../models/Vehicle')
 
 const getMakes = module.exports.getMakes = async (obj, args, context, info) => {
   const url =  `https://vpic.nhtsa.dot.gov/api/vehicles/getallmanufacturers?format=json`
@@ -51,6 +52,15 @@ const resolvers = {
     getMake,
     getMakes,
     getModels,
+  },
+  Mutation: {
+    createVehicle(obj, {input: {make, model, year}}, context, info) {
+      const vehicle = new Vehicle({make: make.name, model: model.name, year})
+      console.log(vehicle)
+
+      return vehicle.save().then(vehicle => ({ ok: true, vehicle: { make, model, year} }))
+
+    }
   },
   Make: {
     models(obj, args, context, info) {

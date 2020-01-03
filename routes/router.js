@@ -12,7 +12,10 @@ const requireSignin = passport.authenticate('local', { session: false })
 module.exports = function(app) {
     app.post('/graphql', graphqlHTTP({
         schema,
-        graphiql: true,
+        graphiql: false,
+    }))
+    app.use('/graphiql', graphqlHTTP({
+        schema, graphiql: true
     }))
 
 

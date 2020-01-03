@@ -14,7 +14,6 @@ type Model {
 
 input ModelInput {
   name: String!
-  year: Year!
 }
 
 type Vehicle {
@@ -35,14 +34,34 @@ input GetModelsInput {
   year: Year!
 }
 
+input CreateVehicleInput {
+  make: MakeInput!
+  model: ModelInput!
+  year: Year!
+}
+
+type VehicleResult {
+  ok: Boolean
+  vehicle: Vehicle
+}
+
 type Query {
   getMakes: [Make]
 
   getMake(name: String! year: Year!): Make
 
   getModels(input: GetModelsInput!): [Model]
+
+  getVehicles: [Vehicle]
+
+  getVehicle(id: ID!) : Vehicle!
+}
+
+type Mutation {
+  createVehicle(input: CreateVehicleInput!): VehicleResult
 }
 
 schema {
   query: Query
+  mutation: Mutation
 }
