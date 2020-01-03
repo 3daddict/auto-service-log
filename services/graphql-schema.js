@@ -30,6 +30,37 @@ const getMake = async name => {
   return _.find(makes, { Mfr_CommonName: name })
 }
 
+const getVehicles = () => {
+  return new Promise((resolve, reject)=>{
+    Vehicle.find((err, results)=>{
+      if(err){
+        reject(err)
+      }
+      resolve(results.map(result=>({make: {name: result.make}, model: {name: result.model}, year: result.year, _id: result._id})))
+    })
+  })
+}
+
+const getVehicle = (obj, {_id})=>{
+  return new Promise((resolve, reject)=>{
+    Vehicle.findOne({_id}, (err, result)=>{
+      if(err){
+        reject(err)
+      }
+      resolve({
+        make: {
+          name: result.make,
+        },
+        model: {
+          name: result.model,
+        },
+        year: result.year,
+        _id: result._id,
+      })
+    })
+  })
+}
+
 const getModels = module.exports.getModels = async (obj, { input: { make, year} }, context, info) => {
   const url = `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformakeyear/make/${make.name}/modelyear/${year}?format=json`
 
@@ -52,6 +83,8 @@ const resolvers = {
     getMake,
     getMakes,
     getModels,
+    getVehicles,
+    getVehicle,
   },
   Mutation: {
     createVehicle(obj, {input: {make, model, year}}, context, info) {

@@ -21,6 +21,7 @@ type Vehicle {
   model: Model!
   trim: String
   year: Year!
+  _id: ID!
 }
 
 type Garage {
@@ -54,7 +55,7 @@ type Query {
 
   getVehicles: [Vehicle]
 
-  getVehicle(id: ID!) : Vehicle!
+  getVehicle(_id: ID!) : Vehicle!
 }
 
 type Mutation {

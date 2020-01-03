@@ -1,7 +1,6 @@
 import "bootstrap/scss/bootstrap.scss";
 import React, { Component } from "react";
 import { Container, Row } from "reactstrap";
-import axios from "axios";
 import requireAuth from "../components/requireAuth";
 import AddVehicle from "../components/dashboard/AddVehicle";
 import VehihcleCard from "../components/dashboard/VehicleCard";
@@ -39,13 +38,40 @@ class Dashboard extends Component {
   };
 
   //CREATE data from the form submission
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
     //destructure
     const { make, model, year } = this.state;
-    //conditional input vaLidation
+    //conditional input validation
     if (!make || !model || !year) return null;
-    //setState + reset form values onSubmit
+    const query = `
+    mutation newVehicle($input: CreateVehicleInput!){
+      createVehicle(input:$input){
+        ok
+        vehicle{
+          make{
+            name
+          }
+          model {
+             name
+          }
+        }
+      }
+    }
+    `
+    const variables = {
+      input: {
+        make:{
+          name: make
+        },
+        model: {
+          name: model
+        },
+        year,
+      }
+    }
+    const res = await makeRequest(query, variables)
+    // setState + reset form values onSubmit
     this.setState(prevState => ({
       //destructure previous values, submit, then reset
       vehicleDatabase: [...prevState.vehicleDatabase, { make, model, year }],
@@ -57,9 +83,22 @@ class Dashboard extends Component {
 
   //READ data from DB and then setState
   readData = async dispatch => {
-    this.setState({
-              vehicleDatabase: dummyDB
-            });
+    const query = `
+      query vehicles {
+        getVehicles{
+          make{
+            name
+          }
+          model {
+            name
+          }
+          year
+          _id
+        }
+      }
+    `
+    const result = await makeRequest(query)
+    this.setState({vehicleDatabase: result.getVehicles})
     // axios.get("/getVehicles")
     //   .then(response => {
     //     this.setState({
@@ -77,7 +116,7 @@ class Dashboard extends Component {
     //Axios update will go here...
     //assing a copy of vehicle array with modified value for the editedVehicle.
     const vehicleDatabase = this.state.vehicleDatabase.map(vehicle => {
-      return vehicle.id === editedVehicle.id ? editedVehicle : vehicle;
+      return vehicle._id === editedVehicle._id ? editedVehicle : vehicle;
     });
     //set new state
     this.setState({
@@ -140,6 +179,8 @@ class Dashboard extends Component {
           {this.state.vehicleDatabase.map((vehicle, key) => (
             <VehihcleCard
               {...vehicle}
+              make={vehicle.make.name}
+              model={vehicle.model.name}
               key={key}
               updateData={this.updateData}
               deleteData={this.deleteData}
