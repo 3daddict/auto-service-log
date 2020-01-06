@@ -1,0 +1,385 @@
+"""
+  a date in the form of YYYY-MM-DD
+"""
+scalar Date
+"""
+  a 4 digit year
+"""
+scalar Year
+"""
+  a number of months ie: 4 = four months
+"""
+scalar Month
+"""
+  a number of days ie: 6 = six days
+"""
+scalar Day
+"""
+  a number of hours ie: 3 = three hours
+"""
+scalar Hour
+"""
+  a number of minutes ie: 9 = nine minutes
+"""
+scalar Minute
+"""
+  a number of seconds ie: 15 = fifteen seconds
+"""
+scalar Second
+"""
+  a generic service
+"""
+interface IService {
+  """
+    the name of the service
+  """
+  name: String!
+  """
+    how long it should take
+  """
+  estimatedTimeToComplete: [String]
+  """
+    how hard is it
+  """
+  difficulty: Difficulty
+  """
+    when should we be reminded to do it again
+  """
+  suggestedServiceInterval: [String]
+  """
+    materials etc...
+  """
+  notes: String
+}
+
+"""
+  a generic mutation result, add ok
+"""
+interface IResult{
+  """
+    did the request succeed
+  """
+  ok: Boolean
+}
+
+"""
+  a vehicle manufacturer
+"""
+type Make {
+  """
+    the manufacturers name
+  """
+  name: String!
+  """
+    the models manufacurered
+  """
+  models: [Model]!
+}
+
+"""
+  a vehicle model
+"""
+type Model {
+  """
+    the model name
+  """
+  name: String!
+  """
+    the model year
+  """
+  year: Year!
+}
+
+"""
+  a specific vehicle (combanation of make, model and year)
+"""
+type Vehicle {
+  """
+    the vehicles make
+  """
+  make: Make!
+  """
+    the vehicles model
+  """
+  model: Model!
+  """
+    the models trim level
+  """
+  trim: String
+  """
+    the model year
+  """
+  year: Year!
+  _id: ID!
+}
+
+type Garage {
+  vehicles: [Vehicle]!
+}
+
+"""
+  a number of minutes ie: 4 = four minutes
+"""
+type MinuteType {
+  minutes: Minute!
+}
+"""
+  a number of seconds ie: 15 = fifteen seconds
+"""
+type SecondType {
+  seconds: Second!
+}
+"""
+  a number of hours ie: 3 = three hours
+"""
+type HourType {
+  hours: Hour!
+}
+"""
+  a number of days ie: 6 = six days
+"""
+type DayType {
+  days: Day!
+}
+"""
+  a number of months ie: 4 = four months
+"""
+type MonthType{
+  months: Month!
+}
+"""
+  a number of years ie: 4 = four years
+"""
+type YearType {
+  years: Year!
+}
+
+"""
+  a specific service that may be done
+"""
+type Service implements IService {
+  name: String!
+  estimatedTimeToComplete: [String]
+  difficulty: Difficulty
+  suggestedServiceInterval: [String]
+  notes: String
+}
+
+"""
+  a record of a service being performed on vehicle
+"""
+type Job {
+  """
+    list of services performed
+  """
+  servicesPerformed: [Service!]!
+  """
+    date services performed
+  """
+  dateCompleted: Date
+  """
+    who performed the service: ie: diy
+  """
+  performedBy: String!
+  """
+    how long did it take
+  """
+  timeTaken: [Interval]
+  """
+    how much did it cost
+  """
+  cost: String
+  """
+    the vehicle the service was performed on
+  """
+  vehicle: Vehicle
+  id: ID!
+}
+
+type VehicleResult implements IResult {
+  ok: Boolean
+  vehicle: Vehicle!
+}
+
+type ServiceResult implements IResult {
+  ok: Boolean
+  service: Service!
+}
+
+type JobResult implements IResult {
+  ok: Boolean
+  job: Job!
+}
+
+input FindServiceInput {
+  name: String
+}
+
+input MinuteInput {
+  minutes: Minute
+}
+
+input SecondInput {
+  seconds: Int!
+}
+
+input HourInput {
+  hours: Int!
+}
+
+input DayInput{
+  days: Int!
+}
+
+input MonthInput {
+  months: Int!
+}
+
+input YearInput {
+  years: Int!
+}
+
+input IntervalInput {
+  seconds: Second
+  minutes: Minute
+  hours: Hour
+  days: Day
+  months: Month
+  years: Year
+}
+
+input ServiceInput{
+  name: String!
+  estimatedTimeToComplete: [String]
+  difficulty: Difficulty
+  suggestedServiceInterval: IntervalInput
+  notes: String
+}
+
+input JobInput {
+  date: Date!
+  performedBy: String!
+  servicesPerformed: [FindServiceInput!]
+  timeTaken: IntervalInput
+  cost: String
+  vehicle: ID!
+  id: ID!
+}
+
+input ModelInput {
+  name: String!
+}
+
+input MakeInput {
+  name: String!
+}
+
+input GetModelsInput {
+  make: MakeInput!
+  year: Year!
+}
+
+input CreateVehicleInput {
+  make: MakeInput!
+  model: ModelInput!
+  year: Year!
+}
+
+
+
+union Interval =
+  MinuteType |
+  SecondType |
+  HourType |
+  DayType |
+  MonthType |
+  YearType
+
+enum Difficulty {
+  """
+    super easy (should do myself)
+  """
+  EASY
+  """
+    a litter harder, should still diy, but research more thouroughly first
+  """
+  INTERMEDIATE
+  """
+    pretty tough, should think about letting a mechanic handle it
+  """
+  HARD
+  """
+    tools or experience needed hard to get, let a pro do these
+  """
+  IMPOSSIBLE
+}
+
+type Query {
+  """
+    get a list of car manufacturers
+  """
+  getMakes: [Make]
+
+  """
+    get a specific make
+  """
+  getMake(name: String!): Make
+
+  """
+    get the models for a manufacture during a given year
+  """
+  getModels(input: GetModelsInput!): [Model]
+
+  """
+    get a list of vehicles stored in db
+  """
+  getVehicles: [Vehicle]
+
+  """
+    get a specific vehicle from the db
+  """
+  getVehicle(_id: ID!) : Vehicle!
+
+  """
+    get a list of serivces stored in db
+  """
+  getServices: [Service]!
+
+  """
+    get a specific service from the db
+  """
+  getService(name: String): Service
+
+  """
+    get a list of job done for a given vehicle
+  """
+  getJobs(vehicle: ID!): [Job]!
+
+  """
+    get a specific job from the db
+  """
+  getJob(id: ID!): Job!
+}
+
+type Mutation {
+  """
+    add a vehicle to the db
+  """
+  createVehicle(input: CreateVehicleInput!): VehicleResult!
+  # removeVehicle(vehicle: ID!): RemovedResult!
+  """
+    add a service to the db
+  """
+  createService(input: ServiceInput!): ServiceResult!
+  # removeService(service: ID!): RemovedResult!
+  """
+    add a job to the db
+  """
+  createJob(input: JobInput!): JobResult!
+  # removeJob(job: ID!): RemovedResult!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
